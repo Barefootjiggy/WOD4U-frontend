@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
     <link rel="stylesheet" href="style.css"> 
+    <script src="script.js" defer></script>
 </head>
 <body>
 
-<div class="login-form-container">
-    <form action="/login" method="POST"> <!-- Update the action as per your backend endpoint -->
-        <h2>Login</h2>
+<!-- <div class="login-form-container"> -->
+
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button type="submit">Login</button>
+    </form>
+    <!-- <form > Update the action as per your backend endpoint -->
+        <!-- <h2>Login</h2>
         <div class="input-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
@@ -19,8 +26,8 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <button type="submit">Login</button>
-    </form>
+        <button type="submit" id="loginForm">Login</button>
+    </form> --> 
 </div>
 
 </body>
