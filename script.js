@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 function loadWorkouts() {
-    fetch('http://localhost:3000/',) // Adjust the URL based on your actual endpoint
+    fetch('http://localhost:3000/api/workouts/',) // Adjust the URL based on your actual endpoint
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -82,4 +82,57 @@ function displayWorkouts(workouts) {
         workoutsContainer.appendChild(workoutElement); // Append to the container
     });
 }
+
+function addWorkout() {
+    const title = document.getElementById('newTitle').value;
+    const description = document.getElementById('newDescription').value;
+    
+    fetch('http://localhost:3000/api/workouts', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }), 
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Refresh the workouts list to show the new workout
+        loadWorkouts();
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function editWorkout(workoutId) {
+    // Populate the edit form with the workout's current data
+    // Then show the form to the user
+    // On form submission, send a PUT request:
+    fetch(`http://localhost:3000/${workoutId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            title: document.getElementById('editTitle').value,
+            description: document.getElementById('editDescription').value,
+        }),
+        credentials: 'include', // If using sessions
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadWorkouts();
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function deleteWorkout(workoutId) {
+    fetch(`http://localhost:3000/${workoutId}`, {
+        method: 'DELETE',
+        credentials: 'include', // If using sessions
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadWorkouts(); // Refresh the list to remove the deleted workout
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
 
