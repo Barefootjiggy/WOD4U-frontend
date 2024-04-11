@@ -39,8 +39,15 @@ function handleLogin(event) {
     // }
 
 // Function to load workouts
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loadWorkoutsBtn = document.getElementById('loadWorkoutsBtn');
+    if (loadWorkoutsBtn) {
+        loadWorkoutsBtn.addEventListener('click', loadWorkouts);
+    }
+});
 function loadWorkouts() {
-    fetch('http://localhost:3000/') // Adjust the URL based on your actual endpoint
+    fetch('http://localhost:3000/',) // Adjust the URL based on your actual endpoint
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -58,13 +65,21 @@ function loadWorkouts() {
 
 // Function to display workouts data on the page
 function displayWorkouts(workouts) {
-    const workoutsContainer = document.getElementById('workoutsContainer');
-    if (workoutsContainer) {
-        workoutsContainer.innerHTML = ''; // Clear existing workouts
-        workouts.forEach(workout => {
-            const workoutElement = document.createElement('div');
-            workoutElement.innerText = workout.name; // Assuming your workout objects have a 'name' property
-            workoutsContainer.appendChild(workoutElement);
-        });
-    }
+    const workoutsContainer = document.querySelector('.workoutsContainer');
+    // Ensure the Load Workouts button stays at the top.
+    workoutsContainer.innerHTML = '<button id="loadWorkoutsBtn">Load Workouts</button>';
+
+    const loadWorkoutsBtn = document.getElementById('loadWorkoutsBtn');
+    loadWorkoutsBtn.addEventListener('click', loadWorkouts); // Reattach the event listener
+
+    workouts.forEach(workout => {
+        const workoutElement = document.createElement('div');
+        workoutElement.className = 'workout'; // For styling
+        workoutElement.innerHTML = `
+            <h3>${workout.title}</h3>
+            <p>${workout.description}</p>
+        `;
+        workoutsContainer.appendChild(workoutElement); // Append to the container
+    });
 }
+
