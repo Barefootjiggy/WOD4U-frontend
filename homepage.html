@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="homepage.css"> 
+    <link rel="stylesheet" href="homepage.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="workoutsContainer">
-    <button id="loadWorkoutsBtn">Load Workouts</button>
-    
-</div>
-<form id="addWorkoutForm">
-    <h3>WODS</h3>
-    <p>Workouts 4 u provided by u</p>
-    <div class="delete-by-title-container">
-        <input type="text" id="deleteTitle" placeholder="Enter workout title" aria-label="Workout title">
-        <button id="deleteByTitleBtn">Delete Workout</button>
+        <button id="loadWorkoutsBtn">Load Workouts</button>
     </div>
-    <div class="edit-by-title-container">
-        <input type="text" id="editTitle" placeholder="Enter workout title" aria-label="Workout title">
-        <button id="editByTitleBtn">Edit Workout</button>
+    <form id="addWorkoutForm">
+        <h3>WODS</h3>
+        <p>Workouts 4 u provided by u</p>
+        <div class="delete-by-title-container">
+            <input type="text" id="deleteTitle" placeholder="Enter workout title" aria-label="Workout title for deletion">
+            <button type="button" id="deleteByTitleBtn">Delete Workout</button>
+        </div>
+        <div class="edit-by-title-container">
+            <input type="text" id="editTitle" placeholder="Enter workout title" aria-label="Original Workout title for edit">
+            <button type="button" id="editByTitleBtn">Edit Workout</button>
+            <div id="editForm" style="display:none;">
+                <input type="text" id="newEditTitle" placeholder="New title" aria-label="New Workout title">
+                <input type="text" id="newEditDescription" placeholder="New description" aria-label="New Workout description">
+                <button type="button" id="submitEdit">Submit</button>
+            </div>
+        </div>
+        <input type="text" id="newTitle" placeholder="Title" aria-label="Add Workout title">
+        <input type="text" id="newDescription" placeholder="Description" aria-label="Add Workout description">
+        <button type="submit">Add Workout</button>
     </div>
-    <input type="text" id="newTitle" placeholder="Title">
-    <input type="text" id="newDescription" placeholder="Description">
-    <button type="submit">Add Workout</button>
-    <button id="backButton">Go Back</button>
-
-</form>
-
-    
+    <button type="button" id="backButton">Go Back</button>
+    </form>
 </body>
 </html>

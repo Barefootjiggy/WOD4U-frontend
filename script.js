@@ -116,18 +116,38 @@ function addWorkout() {
 }
    
 // Proper setup of the event listener for delete button clicks
+// Show the edit form when the "Edit by Title" button is clicked
 document.getElementById('editByTitleBtn').addEventListener('click', () => {
-    const title = encodeURIComponent(document.getElementById('editTitle').value.trim());
-    if (title && confirm(`Are you sure you want to edit the workout titled "${title}"?`)) {
-        fetch(`http://localhost:3000/api/workouts/${title}`, {
-            method: 'PUT', // Confirm this method is supported by your backend
-            credentials: 'include', // Use only if needed
+    // Display the edit form for the user to enter new values
+    document.getElementById('editForm').style.display = 'block';
+});
+
+document.getElementById('submitEdit').addEventListener('click', (event) => {
+    console.log('Submit button clicked'); // This should appear in the console when you click the button
+    event.preventDefault();
+    updateWorkout();
+    // Rest of your code...
+});
+
+function updateWorkout() {
+    console.log('function called')
+    // Extract the title (used as the original title), new title, and new description from the form
+    const oldtitle = encodeURIComponent(document.getElementById('editTitle').value.trim());
+    const newTitle = document.getElementById('newEditTitle').value.trim();
+    const newDescription = document.getElementById('newEditDescription').value.trim();
+console.log(oldtitle, newTitle, newDescription)
+    // Confirm the edit action with the user
+    if (oldtitle && (newTitle || newDescription) && confirm(`Are you sure you want to edit the workout titled "${decodeURIComponent(oldtitle)}"?`)) {
+        // Perform the fetch request to the server to update the workout
+        fetch(`http://localhost:3000/api/workouts/${oldtitle}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                // Ensure you're sending the necessary data for the workout update
-                // For example: { title: "New Title", description: "New Description" }
+                title: oldtitle,
+                title: newTitle,
+                description: newDescription
             }),
         })
         .then(response => {
@@ -138,13 +158,14 @@ document.getElementById('editByTitleBtn').addEventListener('click', () => {
         })
         .then(data => {
             console.log('Workout edited successfully:', data);
-            // Refresh the list of workouts or update the UI here
+            // Hide the edit form and refresh the list of workouts
+            document.getElementById('editForm').style.display = 'none';
+            loadWorkouts();
         })
         .catch(error => {
             console.error('Error:', error);
         });
-    }
-});
+    }}
 
 
 // Proper setup of the event listener for delete button clicks
