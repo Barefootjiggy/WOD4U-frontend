@@ -92,30 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function addWorkout() {
-    const title = document.getElementById('newTitle').value;
-    const description = document.getElementById('newDescription').value;
-    
+    const titleInput = document.getElementById('newTitle'); // Correctly refer to the input
+    const descriptionInput = document.getElementById('newDescription'); // Correctly refer to the input
+
     fetch('http://localhost:3000/api/workouts/', {
         method: 'POST',
-        credentials: 'include', // Assuming you need to include credentials like cookies
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title: titleInput.value, description: descriptionInput.value }),
     })
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json(); // This line correctly parses the JSON response body.
+        return response.json();
     })
     .then(data => {
-        console.log(data); // 'data' is the parsed response body from the previous line.
-        // Refresh the workouts list to show the new workout
+        console.log(data);
         loadWorkouts();
-        title.value = '';
-        description.value = '';
+        titleInput.value = '';  // Clear the title input field
+        descriptionInput.value = '';  // Clear the description input field
     })
     .catch(error => console.error('Error:', error));
 }
+
    
 // Proper setup of the event listener for delete button clicks
 // Show the edit form when the "Edit by Title" button is clicked
@@ -132,24 +132,17 @@ document.getElementById('submitEdit').addEventListener('click', (event) => {
 });
 
 function updateWorkout() {
-    console.log('function called')
-    // Extract the title (used as the original title), new title, and new description from the form
-    const oldtitle = encodeURIComponent(document.getElementById('editTitle').value.trim());
-    const newTitle = document.getElementById('newEditTitle').value.trim();
-    const newDescription = document.getElementById('newEditDescription').value.trim();
-console.log(oldtitle, newTitle, newDescription)
-    // Confirm the edit action with the user
-    if (oldtitle && (newTitle || newDescription) && confirm(`Are you sure you want to edit the workout titled "${decodeURIComponent(oldtitle)}"?`)) {
-        // Perform the fetch request to the server to update the workout
-        fetch(`http://localhost:3000/api/workouts/${oldtitle}`, {
+    const oldTitleInput = document.getElementById('editTitle'); // Use correct input references
+    const newTitleInput = document.getElementById('newEditTitle');
+    const newDescriptionInput = document.getElementById('newEditDescription');
+
+    if (oldTitleInput.value.trim() && (newTitleInput.value.trim() || newDescriptionInput.value.trim())) {
+        fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(oldTitleInput.value.trim())}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                title: oldtitle,
-                title: newTitle,
-                description: newDescription
+                title: newTitleInput.value, // Correct the object to have the correct properties
+                description: newDescriptionInput.value
             }),
         })
         .then(response => {
@@ -160,29 +153,28 @@ console.log(oldtitle, newTitle, newDescription)
         })
         .then(data => {
             console.log('Workout edited successfully:', data);
-            // Hide the edit form and refresh the list of workouts
             document.getElementById('editForm').style.display = 'none';
             loadWorkouts();
-            title.value = '';
-            newTitle.value = '';
-            newDescription.value = '';
+            oldTitleInput.value = '';  // Clear the old title input
+            newTitleInput.value = '';  // Clear the new title input
+            newDescriptionInput.value = '';  // Clear the new description input
         })
         .catch(error => {
             console.error('Error:', error);
         });
-    }}
-
+    }
+}
 
 // Proper setup of the event listener for delete button clicks
 document.getElementById('deleteByTitleBtn').addEventListener('click', () => {
-    const title = document.getElementById('deleteTitle').value.trim();
-    if (title && confirm(`Are you sure you want to delete the workout titled "${title}"?`)) {
-        fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(title)}`, {
+    const titleInput = document.getElementById('deleteTitle');
+    if (titleInput.value.trim() && confirm(`Are you sure you want to delete the workout titled "${titleInput.value.trim()}"?`)) {
+        fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(titleInput.value.trim())}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ title }), // Note: Ensure your server is configured to accept and use this body for DELETE requests.
+            body: JSON.stringify({ title: titleInput.value.trim() }),
         })
         .then(response => {
             if (!response.ok) {
@@ -192,8 +184,8 @@ document.getElementById('deleteByTitleBtn').addEventListener('click', () => {
         })
         .then(data => {
             console.log('Workout deleted successfully:', data);
-            loadWorkouts(); // Refresh the list of workouts to reflect the deletion
-            title.value = '';
+            loadWorkouts();
+            titleInput.value = '';  // Clear the delete title input field after successful operation
         })
         .catch(error => {
             console.error('Error:', error);
