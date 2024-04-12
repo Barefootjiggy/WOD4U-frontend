@@ -47,34 +47,37 @@ div.workout p {
     margin: 0;
 }
 
-.editBtn, .deleteBtn {
-    padding: 8px 12px;
+.edit-by-title-container {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-by-title-container input {
+    padding: 10px;
+    margin-right: 10px;
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.edit-by-title-container button {
+    padding: 10px 20px;
+    background-color: #4dff53;
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    margin: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .editBtn {
-    background-color: #4CAF50; /* Green */
-    color: white;
-  }
-  
-  .editBtn:hover {
-    background-color: #45a049;
-  }
-  
-  .deleteBtn {
-    background-color: #f44336; /* Red */
-    color: white;
-  }
-  
-  .deleteBtn:hover {
-    background-color: #da190b;
-  }
-  
+}
+
+.edit-by-title-container button:hover {
+    background-color: #a1dd85;
+}
+
   #backButton {
     padding: 10px 20px;
     background-color: #f1f1f1;
@@ -86,3 +89,35 @@ div.workout p {
 #backButton:hover {
     background-color: #ddd;
 }
+
+.delete-by-title-container {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-by-title-container input {
+    padding: 10px;
+    margin-right: 10px;
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.delete-by-title-container button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-by-title-container button:hover {
+    background-color: #cc0000;
+}
+

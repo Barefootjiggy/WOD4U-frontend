@@ -10,12 +10,19 @@
 <body>
     <div class="workoutsContainer">
     <button id="loadWorkoutsBtn">Load Workouts</button>
+    
 </div>
 <form id="addWorkoutForm">
     <h3>WODS</h3>
     <p>Workouts 4 u provided by u</p>
-    <button class="editBtn">Edit</button>
-    <button class="deleteBtn">Delete</button>
+    <div class="delete-by-title-container">
+        <input type="text" id="deleteTitle" placeholder="Enter workout title" aria-label="Workout title">
+        <button id="deleteByTitleBtn">Delete Workout</button>
+    </div>
+    <div class="edit-by-title-container">
+        <input type="text" id="editTitle" placeholder="Enter workout title" aria-label="Workout title">
+        <button id="editByTitleBtn">Edit Workout</button>
+    </div>
     <input type="text" id="newTitle" placeholder="Title">
     <input type="text" id="newDescription" placeholder="Description">
     <button type="submit">Add Workout</button>
