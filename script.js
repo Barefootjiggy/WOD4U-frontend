@@ -32,6 +32,32 @@ function handleLogin(event) {
     })
 }
 })
+
+document.getElementById('signupForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch('http://localhost:3000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Signup successful!');
+        window.location.href = '/login.html'; // Redirect to login page or homepage as needed
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('Signup failed, please try again.');
+    });
+});
+
     // Adding event listener to load workouts button
     // const loadWorkoutsBtn = document.getElementById('loadWorkoutsBtn');
     // if (loadWorkoutsBtn) {
@@ -221,11 +247,16 @@ function loadWorkouts() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const backButton = document.getElementById('backButton');
-    backButton.addEventListener('click', () => {
-        console.log("Back button clicked");
-        window.history.back();
-    });
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            console.log("Back button clicked");
+            window.history.back();
+        });
+    } else {
+        console.log("Back button not found");
+    }
 });
+
 
 function setupInputValidation(inputId, buttonId) {
     const input = document.getElementById(inputId);

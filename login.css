@@ -1,4 +1,3 @@
-/* style.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -14,6 +13,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Adjust the width as necessary */
 }
 
 input[type="text"],
@@ -23,7 +23,7 @@ input[type="password"] {
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    box-sizing: border-box; /* Ensures padding doesn't increase the input width */
+    box-sizing: border-box;
 }
 
 button {
@@ -40,11 +40,16 @@ button:hover {
     background-color: #004494;
 }
 
-.input-group {
-    margin-bottom: 15px;
+p {
+    text-align: center; /* Center the text */
+    margin-top: 10px; /* Space between the form and the link */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
