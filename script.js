@@ -111,6 +111,8 @@ function addWorkout() {
         console.log(data); // 'data' is the parsed response body from the previous line.
         // Refresh the workouts list to show the new workout
         loadWorkouts();
+        title.value = '';
+        description.value = '';
     })
     .catch(error => console.error('Error:', error));
 }
@@ -161,6 +163,9 @@ console.log(oldtitle, newTitle, newDescription)
             // Hide the edit form and refresh the list of workouts
             document.getElementById('editForm').style.display = 'none';
             loadWorkouts();
+            title.value = '';
+            newTitle.value = '';
+            newDescription.value = '';
         })
         .catch(error => {
             console.error('Error:', error);
@@ -188,6 +193,7 @@ document.getElementById('deleteByTitleBtn').addEventListener('click', () => {
         .then(data => {
             console.log('Workout deleted successfully:', data);
             loadWorkouts(); // Refresh the list of workouts to reflect the deletion
+            title.value = '';
         })
         .catch(error => {
             console.error('Error:', error);
@@ -228,6 +234,28 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.back();
     });
 });
+
+function setupInputValidation(inputId, buttonId) {
+    const input = document.getElementById(inputId);
+    const button = document.getElementById(buttonId);
+
+    // Initially disable the button if you require the field to not be empty.
+    button.disabled = !input.value.trim();
+
+    input.addEventListener('input', () => {
+        // Enable the button only if the input is not empty.
+        button.disabled = !input.value.trim();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupInputValidation('deleteTitle', 'deleteByTitleBtn');
+    setupInputValidation('editTitle', 'editByTitleBtn');
+    setupInputValidation('newTitle', 'addWorkoutForm');  // Assuming you use the form's submit button for adding workouts
+
+    // Add other event listeners and initialization code here.
+});
+
 
 
 
