@@ -83,24 +83,40 @@ function displayWorkouts(workouts) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('addWorkoutForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        addWorkout();
+    });
+});
+
 function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
     
-    fetch('http://localhost:3000/api/workouts', {
+    fetch('http://localhost:3000/api/workouts/', {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // Assuming you need to include credentials like cookies
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }), 
+        body: JSON.stringify({ title, description }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // This line correctly parses the JSON response body.
+    })
     .then(data => {
+        console.log(data); // 'data' is the parsed response body from the previous line.
         // Refresh the workouts list to show the new workout
         loadWorkouts();
     })
     .catch(error => console.error('Error:', error));
 }
 
+
+    
 function editWorkout(workoutId) {
     // Populate the edit form with the workout's current data
     // Then show the form to the user
@@ -122,17 +138,48 @@ function editWorkout(workoutId) {
     .catch(error => console.error('Error:', error));
 }
 
+workouts.forEach(workout => {
+    const workoutElement = document.createElement('div');
+    workoutElement.className = 'workout';
+    workoutElement.innerHTML = `
+        <h3>${workout.title}</h3>
+        <p>${workout.description}</p>
+        <button class="deleteBtn" data-id="${workout._id}">Delete</button>
+    `;
+    workoutsContainer.appendChild(workoutElement);
+});
+
+// Assuming 'workoutsContainer' is already filled with workout elements
+workoutsContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('deleteBtn')) {
+        const workoutId = event.target.getAttribute('data-id');
+        deleteWorkout(workoutId);
+    }
+});
+
+
 function deleteWorkout(workoutId) {
-    fetch(`http://localhost:3000/${workoutId}`, {
+    fetch(`http://localhost:3000/api/workouts/${workoutId}`, {
         method: 'DELETE',
         credentials: 'include', // If using sessions
     })
     .then(response => response.json())
     .then(data => {
-        loadWorkouts(); // Refresh the list to remove the deleted workout
+        loadWorkouts(); // Refresh the list to reflect the deletion
     })
     .catch(error => console.error('Error:', error));
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', () => {
+        console.log("Back button clicked");
+        window.history.back();
+    });
+});
+
+
 
 
 

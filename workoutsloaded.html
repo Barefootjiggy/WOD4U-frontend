@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="homepage.css"> 
+    <link rel="stylesheet" href="workoutsloaded.css"> 
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="workoutsContainer">
     <button id="loadWorkoutsBtn">Load Workouts</button>
 </div>
-<form id="addWorkoutForm">
+<div id="addWorkoutForm">
     <h3>WODS</h3>
     <p>Workouts 4 u provided by u</p>
     <button class="editBtn">Edit</button>
     <button class="deleteBtn">Delete</button>
     <input type="text" id="newTitle" placeholder="Title">
     <input type="text" id="newDescription" placeholder="Description">
-    <button type="submit">Add Workout</button>
+    <button onclick="addWorkout()">Add Workout</button>
     <button id="backButton">Go Back</button>
 
-</form>
+</div>
 
     
 </body>
