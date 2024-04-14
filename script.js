@@ -193,6 +193,15 @@ function handleEditSubmit(event) {
             });
         }
     }
+
+    function setupBackButton() {
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            backButton.addEventListener('click', () => {
+                window.history.back();
+            });
+        }
+    }
     
 
 
