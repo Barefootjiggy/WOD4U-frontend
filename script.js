@@ -43,7 +43,7 @@ function setupSignupForm() {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            fetch('http://localhost:3000/api/auth/signup', {
+            fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -115,12 +115,23 @@ function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
 
+    // Retrieve the authentication token from local storage or wherever it's stored
+    const token = localStorage.getItem('authToken');
+
     fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        },
         body: JSON.stringify({ title, description })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('Added workout:', data);
         loadWorkouts();
@@ -131,6 +142,7 @@ function addWorkout() {
         console.error('Error adding workout:', error);
     });
 }
+
 
 function handleEditSubmit(event) {
     event.preventDefault();
