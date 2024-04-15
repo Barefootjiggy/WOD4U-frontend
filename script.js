@@ -21,12 +21,20 @@ function handleLogin(event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user, password: password }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data) {
+        if (data.token) {
+            // Store the token in local storage
+            localStorage.setItem('authToken', data.token);
+            // Redirect to homepage after successful login
             window.location.href = '/homepage.html';
         } else {
-            alert('Login failed: ' + data.message);
+            alert('Login failed: Invalid username or password.');
         }
     })
     .catch(error => {
@@ -34,6 +42,7 @@ function handleLogin(event) {
         alert('Login failed, please try again.');
     });
 }
+
 
 function setupSignupForm() {
     const signupForm = document.getElementById('signupForm');
