@@ -17,7 +17,7 @@ function handleLogin(event) {
     event.preventDefault();
     const user = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    fetch('http://localhost:3000/api/auth/login', {
+    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user, password: password }),
@@ -94,7 +94,7 @@ function setupWorkoutFeatures() {
 }
 
 function loadWorkouts() {
-    fetch('http://localhost:3000/api/workouts/')
+    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/')
     .then(response => response.json())
     .then(workouts => {
         const workoutsContainer = document.querySelector('.workoutsContainer');
@@ -115,7 +115,7 @@ function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
 
-    fetch('http://localhost:3000/api/workouts/', {
+    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description })
@@ -138,7 +138,7 @@ function handleEditSubmit(event) {
     const newTitle = document.getElementById('newEditTitle').value;
     const newDescription = document.getElementById('newEditDescription').value;
 
-    fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(oldTitle)}`, {
+    fetch(`https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/${encodeURIComponent(oldTitle)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -169,7 +169,7 @@ function handleEditSubmit(event) {
     function handleDelete() {
         const title = document.getElementById('deleteTitle').value.trim();
         if (title && confirm(`Are you sure you want to delete the workout titled "${title}"?`)) {
-            fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(title)}`, {
+            fetch(`https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/${encodeURIComponent(title)}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
