@@ -114,8 +114,6 @@ function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
 
-    // Retrieve the authentication token from local storage or wherever it's stored
-    const token = localStorage.getItem('authToken');
 
     fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
         method: 'POST',
