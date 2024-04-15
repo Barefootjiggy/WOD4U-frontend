@@ -114,11 +114,20 @@ function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
 
+    // Retrieve the authentication token from local storage
+    const token = localStorage.getItem('authToken');
+
+    // Check if the token is present
+    if (!token) {
+        alert('You need to login first.');
+        return;
+    }
 
     fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
         },
         body: JSON.stringify({ title, description })
     })
@@ -138,6 +147,7 @@ function addWorkout() {
         console.error('Error adding workout:', error);
     });
 }
+
 
 
 function handleEditSubmit(event) {
