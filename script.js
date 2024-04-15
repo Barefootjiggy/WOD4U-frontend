@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSignupForm();
     setupWorkoutFeatures();
     setupBackButton();
-    setupInputValidations();
 });
 
 function setupLoginForm() {
