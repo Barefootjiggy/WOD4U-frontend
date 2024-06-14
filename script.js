@@ -232,7 +232,7 @@ function handleDelete() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to delete workout. You are not authroized to edit workout.');
+            alert('Failed to delete workout. You are not authroized to delete workout.');
         });
     }
 }
