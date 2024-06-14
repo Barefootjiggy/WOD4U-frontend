@@ -9,9 +9,9 @@ function setupLoginForm() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
-        console.log('Login form event listener attached'); // Debugging log
+        console.log('Login form event listener attached'); 
     } else {
-        console.log('Login form not found'); // Debugging log
+        console.log('Login form not found'); 
     }
 }
 
@@ -21,32 +21,27 @@ function handleLogin(event) {
     const password = document.getElementById('password').value;
     console.log("Attempting to log in with:", user, password);
 
-    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/auth/login', {
+    fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user, password: password }),
     })
     .then(response => {
-        console.log('Response status:', response.status); // Log response status
-        return response.json()
-        .then(data => {
-            console.log('Parsed response data:', data); // Log parsed response data
+        console.log('Response status:', response.status); 
+        return response.json().then(data => {
+            console.log('Parsed response data:', data);
             return { status: response.status, ok: response.ok, data };
-        })
-        .catch(error => {
-            console.error('Error parsing JSON:', error); // Log JSON parsing error
-            throw new Error('Invalid JSON response');
         });
     })
     .then(({ status, ok, data }) => {
-        console.log('Login response:', { status, ok, data }); // Debugging log for entire response
+        console.log('Login response:', { status, ok, data });
         if (ok && data.token) {
             alert('Login successful!');
-            console.log('Token:', data.token); // Debugging log for token
-            localStorage.setItem('token', data.token); // Store token in localStorage
-            window.location.href = '/homepage.html'; // Redirect to homepage
+            console.log('Token:', data.token); 
+            localStorage.setItem('token', data.token);
+            window.location.href = '/homepage.html'; 
         } else {
-            console.error('Login failed, no token received:', data); // Debugging log for failure
+            console.error('Login failed, no token received:', data); 
             alert('Login failed: ' + (data.error || 'Invalid username or password.'));
         }
     })
@@ -63,7 +58,7 @@ function setupSignupForm() {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/auth/signup', {
+            fetch('http://localhost:3000/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -72,8 +67,8 @@ function setupSignupForm() {
             .then(data => {
                 if (data.token) {
                     alert('Signup successful!');
-                    localStorage.setItem('token', data.token); // Store token in localStorage
-                    window.location.href = '/index.html'; // Redirect to index
+                    localStorage.setItem('token', data.token); // 
+                    window.location.href = '/index.html'; // 
                 } else {
                     alert('Signup failed: ' + (data.errorMessage || 'Please try again.'));
                 }
@@ -119,10 +114,10 @@ function setupWorkoutFeatures() {
 }
 
 function loadWorkouts() {
-    const token = localStorage.getItem('token'); // Get token from localStorage
-    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
+    const token = localStorage.getItem('token'); 
+    fetch('http://localhost:3000/api/workouts/', {
         headers: {
-            'Authorization': `Bearer ${token}` // Include token in request headers
+            'Authorization': `Bearer ${token}` 
         }
     })
     .then(response => response.json())
@@ -144,12 +139,12 @@ function loadWorkouts() {
 function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
-    const token = localStorage.getItem('token'); // Get token from localStorage
-    fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
+    const token = localStorage.getItem('token'); 
+    fetch('http://localhost:3000/api/workouts/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Include token in request headers
+            'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify({ title, description })
     })
@@ -175,13 +170,13 @@ function handleEditSubmit(event) {
     const oldTitle = document.getElementById('editTitle').value;
     const newTitle = document.getElementById('newEditTitle').value;
     const newDescription = document.getElementById('newEditDescription').value;
-    const token = localStorage.getItem('token'); // Get token from localStorage
+    const token = localStorage.getItem('token'); 
 
-    fetch(`https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/${encodeURIComponent(oldTitle)}`, {
+    fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(oldTitle)}`, {
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Include token in request headers
+            'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify({
             title: newTitle, 
@@ -204,19 +199,19 @@ function handleEditSubmit(event) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Failed to edit workout.');
+        alert('Failed to edit workout. You are not authorized to edit workout.');
     });
 }
 
 function handleDelete() {
     const title = document.getElementById('deleteTitle').value.trim();
-    const token = localStorage.getItem('token'); // Get token from localStorage
+    const token = localStorage.getItem('token');
     if (title && confirm(`Are you sure you want to delete the workout titled "${title}"?`)) {
-        fetch(`https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/${encodeURIComponent(title)}`, {
+        fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(title)}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Include token in request headers
+                'Authorization': `Bearer ${token}` 
             }
         })
         .then(response => {
@@ -232,7 +227,7 @@ function handleDelete() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to delete workout.');
+            alert('Failed to delete workout. You are not authorized to delete workout.');
         });
     }
 }
@@ -246,9 +241,6 @@ function setupBackButton() {
     }
 }
 
-
-
-    
 
 
 
