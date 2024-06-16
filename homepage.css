@@ -179,3 +179,14 @@ div.workout p {
 #addCommentForm button:hover {
     background-color: #0056b3;
 }
+
+.workout-title {
+    cursor: pointer; /* Changes the cursor to a pointer */
+    color: blue; /* Optional: change the color to make it look like a link */
+    text-decoration: underline; /* Optional: underline to make it look like a link */
+}
+
+.workout-title:hover {
+    color: darkblue; /* Optional: change color on hover */
+    text-decoration: none; /* Optional: remove underline on hover */
+}
