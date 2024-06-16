@@ -397,7 +397,7 @@ function setupLogoutButton() {
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('token');
-            window.location.href = '/index.html'; // Redirect to login page
+            window.location.href = '/index.html'; 
         });
     }
 }
