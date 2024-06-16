@@ -78,7 +78,7 @@ div.workout p {
     background-color: #a1dd85;
 }
 
-  #backButton {
+  /* #backButton {
     padding: 10px 20px;
     background-color: #f1f1f1;
     border: none;
@@ -87,6 +87,18 @@ div.workout p {
 }
 
 #backButton:hover {
+    background-color: #ddd;
+} */
+
+#logoutButton {
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#logoutButton:hover {
     background-color: #ddd;
 }
 

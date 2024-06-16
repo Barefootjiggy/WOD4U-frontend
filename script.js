@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLoginForm();
     setupSignupForm();
     setupWorkoutFeatures();
-    setupBackButton();
+    // setupBackButton();
+    setupLogoutButton();
 });
 
 function setupLoginForm() {
@@ -382,12 +383,21 @@ function handleDelete() {
     }
 }
 
-function setupBackButton() {
-    const backButton = document.getElementById('backButton');
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            window.history.back();
+// function setupBackButton() {
+//     const backButton = document.getElementById('backButton');
+//     if (backButton) {
+//         backButton.addEventListener('click', () => {
+//             window.history.back();
+//         });
+//     }
+// }
+
+function setupLogoutButton() {
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = '/index.html'; // Redirect to login page
         });
     }
 }
-
