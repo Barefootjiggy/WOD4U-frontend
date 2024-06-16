@@ -45,8 +45,6 @@ function setupSignupForm() {
     if (signupForm) {
         signupForm.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             fetch('http://localhost:3000/api/auth/signup', {
@@ -104,6 +102,9 @@ function setupWorkoutFeatures() {
     }
 }
 
+document.getElementById('loadWorkoutsBtn').addEventListener('click', loadWorkouts);
+
+
 function loadWorkouts() {
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/workouts/', {
@@ -133,6 +134,7 @@ function loadWorkouts() {
                     const workoutId = event.target.getAttribute('data-id');
                     const workoutTitle = event.target.textContent;
                     showComments(workoutId, workoutTitle);
+                    scrollToComments();
                 });
             });
         })
@@ -148,6 +150,11 @@ function showComments(workoutId, workoutTitle) {
 
     const addCommentForm = document.getElementById('addCommentForm');
     addCommentForm.onsubmit = event => handleAddComment(event, workoutId);
+}
+
+function scrollToComments() {
+    const commentsSection = document.getElementById('comments-section');
+    commentsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 function loadComments(workoutId) {
