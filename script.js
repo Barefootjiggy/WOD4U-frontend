@@ -102,6 +102,8 @@ function setupWorkoutFeatures() {
     }
 }
 
+document.getElementById('loadWorkoutsBtn').addEventListener('click', loadWorkouts);
+
 function loadWorkouts() {
     const token = localStorage.getItem('token');
     fetch('https://wod4u-cfaebfd65d57.herokuapp.com/api/workouts/', {
@@ -131,6 +133,7 @@ function loadWorkouts() {
                     const workoutId = event.target.getAttribute('data-id');
                     const workoutTitle = event.target.textContent;
                     showComments(workoutId, workoutTitle);
+                    scrollToComments();
                 });
             });
         })
@@ -146,6 +149,11 @@ function showComments(workoutId, workoutTitle) {
 
     const addCommentForm = document.getElementById('addCommentForm');
     addCommentForm.onsubmit = event => handleAddComment(event, workoutId);
+}
+
+function scrollToComments() {
+    const commentsSection = document.getElementById('comments-section');
+    commentsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 function loadComments(workoutId) {
