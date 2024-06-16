@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="homepage.css">
-    <script defer src="script.js" ></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <div class="workoutsContainer">
         <button id="loadWorkoutsBtn">Load Workouts</button>
+    </div>
+    <div id="comments-section" style="display:none;">
+        <h3>Comments for <span id="workout-title"></span></h3>
+        <ul id="comments-list"></ul>
+        <form id="addCommentForm">
+            <textarea id="commentText" required></textarea>
+            <button type="submit">Add Comment</button>
+        </form>
     </div>
     <form id="addWorkoutForm">
         <h3>WODS</h3>
@@ -22,7 +30,7 @@
             <input type="text" id="editTitle" placeholder="Enter workout title" aria-label="Original Workout title for edit">
             <button type="button" id="editByTitleBtn">Edit Workout</button>
             <div id="editForm" style="display:none;">
-                <input type="text" id="newEditTitle" placeholder="New title" aria-label="New Workout title">
+                <input type="text" id="newEditTitle" placeholder="New Title" aria-label="New Workout title">
                 <input type="text" id="newEditDescription" placeholder="New description" aria-label="New Workout description">
                 <button type="button" id="submitEdit">Submit</button>
             </div>
@@ -30,8 +38,8 @@
         <input type="text" id="newTitle" placeholder="Title" aria-label="Add Workout title">
         <input type="text" id="newDescription" placeholder="Description" aria-label="Add Workout description">
         <button type="submit">Add Workout</button>
-    </div>
-    <button type="button" id="backButton">Log Out</button>
     </form>
+    <!-- <button type="button" id="backButton">Back</button> -->
+    <button type="button" id="logoutButton">Log Out</button>
 </body>
 </html>

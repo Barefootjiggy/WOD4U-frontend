@@ -78,7 +78,7 @@ div.workout p {
     background-color: #a1dd85;
 }
 
-  #backButton {
+  /* #backButton {
     padding: 10px 20px;
     background-color: #f1f1f1;
     border: none;
@@ -87,6 +87,18 @@ div.workout p {
 }
 
 #backButton:hover {
+    background-color: #ddd;
+} */
+
+#logoutButton {
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#logoutButton:hover {
     background-color: #ddd;
 }
 
@@ -121,3 +133,72 @@ div.workout p {
     background-color: #cc0000;
 }
 
+#comments-section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+#comments-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#comments-list li {
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 0;
+}
+
+#comments-list li:last-child {
+    border-bottom: none;
+}
+
+#comments-list button {
+    margin-left: 10px;
+    background-color: #f1f1f1;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#comments-list button:hover {
+    background-color: #ddd;
+}
+
+#addCommentForm {
+    margin-top: 20px;
+}
+
+#addCommentForm textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#addCommentForm button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#addCommentForm button:hover {
+    background-color: #0056b3;
+}
+
+.workout-title {
+    cursor: pointer; /* Changes the cursor to a pointer */
+    color: blue; /* Optional: change the color to make it look like a link */
+    text-decoration: underline; /* Optional: underline to make it look like a link */
+}
+
+.workout-title:hover {
+    color: darkblue; /* Optional: change color on hover */
+    text-decoration: none; /* Optional: remove underline on hover */
+}
