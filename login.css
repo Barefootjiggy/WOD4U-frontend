@@ -13,7 +13,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px; /* Adjust the width as necessary */
+    width: 300px; 
 }
 
 input[type="text"],
@@ -41,8 +41,7 @@ button:hover {
 }
 
 p {
-    text-align: center; /* Center the text */
-    margin-top: 10px; /* Space between the form and the link */
+    text-align: center; 
 }
 
 a {

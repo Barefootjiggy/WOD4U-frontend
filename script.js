@@ -3,15 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSignupForm();
     setupWorkoutFeatures();
     setupBackButton();
+    loadWorkouts();
 });
 
 function setupLoginForm() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
-        console.log('Login form event listener attached'); 
+        console.log('Login form event listener attached');
     } else {
-        console.log('Login form not found'); 
+        console.log('Login form not found');
     }
 }
 
@@ -26,35 +27,35 @@ function handleLogin(event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user, password: password }),
     })
-    .then(response => {
-        console.log('Response status:', response.status); 
-        return response.json().then(data => {
-            console.log('Parsed response data:', data);
-            return { status: response.status, ok: response.ok, data };
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json().then(data => {
+                console.log('Parsed response data:', data);
+                return { status: response.status, ok: response.ok, data };
+            });
+        })
+        .then(({ status, ok, data }) => {
+            console.log('Login response:', { status, ok, data });
+            if (ok && data.token) {
+                alert('Login successful!');
+                console.log('Token:', data.token);
+                localStorage.setItem('token', data.token);
+                window.location.href = '/homepage.html';
+            } else {
+                console.error('Login failed, no token received:', data);
+                alert('Login failed: ' + (data.error || 'Invalid username or password.'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Login failed, please try again.');
         });
-    })
-    .then(({ status, ok, data }) => {
-        console.log('Login response:', { status, ok, data });
-        if (ok && data.token) {
-            alert('Login successful!');
-            console.log('Token:', data.token); 
-            localStorage.setItem('token', data.token);
-            window.location.href = '/homepage.html'; 
-        } else {
-            console.error('Login failed, no token received:', data); 
-            alert('Login failed: ' + (data.error || 'Invalid username or password.'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Login failed, please try again.');
-    });
 }
 
 function setupSignupForm() {
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
-        signupForm.addEventListener('submit', function(event) {
+        signupForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -63,20 +64,20 @@ function setupSignupForm() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    alert('Signup successful!');
-                    localStorage.setItem('token', data.token); // 
-                    window.location.href = '/index.html'; // 
-                } else {
-                    alert('Signup failed: ' + (data.errorMessage || 'Please try again.'));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Signup failed, please try again.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        alert('Signup successful!');
+                        localStorage.setItem('token', data.token); 
+                        window.location.href = '/login.html'; 
+                    } else {
+                        alert('Signup failed: ' + (data.errorMessage || 'Please try again.'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Signup failed, please try again.');
+                });
         });
     }
 }
@@ -89,7 +90,7 @@ function setupWorkoutFeatures() {
 
     const addWorkoutForm = document.getElementById('addWorkoutForm');
     if (addWorkoutForm) {
-        addWorkoutForm.addEventListener('submit', function(event) {
+        addWorkoutForm.addEventListener('submit', function (event) {
             event.preventDefault();
             addWorkout();
         });
@@ -114,55 +115,199 @@ function setupWorkoutFeatures() {
 }
 
 function loadWorkouts() {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/workouts/', {
         headers: {
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token}`
         }
     })
-    .then(response => response.json())
-    .then(workouts => {
-        const workoutsContainer = document.querySelector('.workoutsContainer');
-        workoutsContainer.innerHTML = '';
-        workouts.forEach(workout => {
-            const workoutElement = document.createElement('div');
-            workoutElement.className = 'workout';
-            workoutElement.innerHTML = `<h3>${workout.title}</h3><p>${workout.description}</p>`;
-            workoutsContainer.appendChild(workoutElement);
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(workouts => {
+            console.log('Workouts:', workouts);
+            const workoutsContainer = document.querySelector('.workoutsContainer');
+            workoutsContainer.innerHTML = '';
+            workouts.forEach(workout => {
+                const workoutElement = document.createElement('div');
+                workoutElement.className = 'workout';
+                workoutElement.innerHTML = `
+                    <h3 class="workout-title" data-id="${workout._id}">${workout.title}</h3>
+                    <p>${workout.description}</p>
+                `;
+                workoutsContainer.appendChild(workoutElement);
+            });
+            document.querySelectorAll('.workout-title').forEach(titleElement => {
+                titleElement.addEventListener('click', (event) => {
+                    const workoutId = event.target.getAttribute('data-id');
+                    const workoutTitle = event.target.textContent;
+                    showComments(workoutId, workoutTitle);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error loading workouts:', error);
         });
+}
+
+function showComments(workoutId, workoutTitle) {
+    document.getElementById('workout-title').textContent = workoutTitle;
+    document.getElementById('comments-section').style.display = 'block';
+    loadComments(workoutId);
+
+    const addCommentForm = document.getElementById('addCommentForm');
+    addCommentForm.onsubmit = event => handleAddComment(event, workoutId);
+}
+
+function loadComments(workoutId) {
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:3000/api/comments/${workoutId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     })
-    .catch(error => {
-        console.error('Error loading workouts:', error);
-    });
+        .then(response => response.json())
+        .then(comments => {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            comments.forEach(comment => {
+                const li = document.createElement('li');
+                li.innerHTML = `${comment.user.username}: ${comment.text} <br> <small>${new Date(comment.createdAt).toLocaleString()}</small>`;
+                if (comment.user._id === getCurrentUserId()) {
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.onclick = () => handleEditComment(comment._id, workoutId);
+                    li.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => handleDeleteComment(comment._id, workoutId);
+                    li.appendChild(deleteButton);
+                }
+                commentsList.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error loading comments:', error));
+}
+
+function handleAddComment(event, workoutId) {
+    event.preventDefault();
+    const commentText = document.getElementById('commentText').value;
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/api/comments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ text: commentText, workout: workoutId })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            loadComments(workoutId);
+            document.getElementById('commentText').value = '';
+        })
+        .catch(error => {
+            console.error('Error adding comment:', error);
+            alert(`Failed to add comment: ${error.message}`);
+        });
+}
+
+function handleEditComment(commentId, workoutId) {
+    const newText = prompt('Edit your comment:');
+    if (newText) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/comments/${commentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ text: newText })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                loadComments(workoutId);
+            })
+            .catch(error => {
+                console.error('Error editing comment:', error);
+                alert(`Failed to edit comment: ${error.message}`);
+            });
+    }
+}
+
+function handleDeleteComment(commentId, workoutId) {
+    if (confirm('Are you sure you want to delete this comment?')) {
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:3000/api/comments/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                loadComments(workoutId);
+            })
+            .catch(error => {
+                console.error('Error deleting comment:', error);
+                alert(`Failed to delete comment: ${error.message}`);
+            });
+    }
+}
+
+function getCurrentUserId() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return null;
+    }
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
 }
 
 function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/workouts/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ title, description })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Added workout:', data);
-        loadWorkouts();
-        document.getElementById('newTitle').value = '';
-        document.getElementById('newDescription').value = '';
-    })
-    .catch(error => {
-        console.error('Error adding workout:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Added workout:', data);
+            loadWorkouts();
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newDescription').value = '';
+        })
+        .catch(error => {
+            console.error('Error adding workout:', error);
+        });
 }
 
 function handleEditSubmit(event) {
@@ -170,37 +315,37 @@ function handleEditSubmit(event) {
     const oldTitle = document.getElementById('editTitle').value;
     const newTitle = document.getElementById('newEditTitle').value;
     const newDescription = document.getElementById('newEditDescription').value;
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
 
     fetch(`http://localhost:3000/api/workouts/${encodeURIComponent(oldTitle)}`, {
         method: 'PUT',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-            title: newTitle, 
+            title: newTitle,
             description: newDescription
         })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Workout edited successfully:', data);
-        document.getElementById('editForm').style.display = 'none';
-        loadWorkouts();
-        document.getElementById('editTitle').value = '';
-        document.getElementById('newEditTitle').value = '';
-        document.getElementById('newEditDescription').value = '';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to edit workout. You are not authorized to edit workout.');
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Workout edited successfully:', data);
+            document.getElementById('editForm').style.display = 'none';
+            loadWorkouts();
+            document.getElementById('editTitle').value = '';
+            document.getElementById('newEditTitle').value = '';
+            document.getElementById('newEditDescription').value = '';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to edit workout. You are not authorized to edit workout.');
+        });
 }
 
 function handleDelete() {
@@ -211,24 +356,24 @@ function handleDelete() {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Workout deleted successfully:', data);
-            loadWorkouts();
-            document.getElementById('deleteTitle').value = '';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to delete workout. You are not authorized to delete workout.');
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Workout deleted successfully:', data);
+                loadWorkouts();
+                document.getElementById('deleteTitle').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete workout. You are not authorized to delete workout.');
+            });
     }
 }
 
@@ -240,12 +385,4 @@ function setupBackButton() {
         });
     }
 }
-
-
-
-
-
-
-
-
 

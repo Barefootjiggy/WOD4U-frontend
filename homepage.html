@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="homepage.css">
-    <script defer src="script.js" ></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <div class="workoutsContainer">
         <button id="loadWorkoutsBtn">Load Workouts</button>
+    </div>
+    <div id="comments-section" style="display:none;">
+        <h3>Comments for <span id="workout-title"></span></h3>
+        <ul id="comments-list"></ul>
+        <form id="addCommentForm">
+            <textarea id="commentText" required></textarea>
+            <button type="submit">Add Comment</button>
+        </form>
     </div>
     <form id="addWorkoutForm">
         <h3>WODS</h3>
@@ -30,8 +38,7 @@
         <input type="text" id="newTitle" placeholder="Title" aria-label="Add Workout title">
         <input type="text" id="newDescription" placeholder="Description" aria-label="Add Workout description">
         <button type="submit">Add Workout</button>
-    </div>
-    <button type="button" id="backButton">Log Out</button>
     </form>
+    <button type="button" id="backButton">Log Out</button>
 </body>
 </html>
