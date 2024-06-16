@@ -34,6 +34,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-bottom: 10px; /* Add margin between buttons */
 }
 
 button:hover {

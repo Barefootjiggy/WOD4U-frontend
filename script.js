@@ -45,6 +45,8 @@ function setupSignupForm() {
     if (signupForm) {
         signupForm.addEventListener('submit', function (event) {
             event.preventDefault();
+
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             fetch('http://localhost:3000/api/auth/signup', {
