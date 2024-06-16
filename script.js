@@ -280,9 +280,24 @@ function getCurrentUserId() {
     return payload.userId;
 }
 
+document.getElementById('newTitle').addEventListener('input', function(event) {
+    const value = event.target.value;
+    const regex = /[^a-zA-Z0-9\s]/; // Regex to match special characters
+    if (regex.test(value)) {
+        alert('Special characters are not allowed in the title.');
+        event.target.value = value.replace(regex, ''); // Remove the special characters
+    }
+});
+
 function addWorkout() {
     const title = document.getElementById('newTitle').value;
     const description = document.getElementById('newDescription').value;
+
+    if (title.trim() === '') {
+        alert('Title cannot be empty.');
+        return;
+    }
+
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/api/workouts/', {
         method: 'POST',
