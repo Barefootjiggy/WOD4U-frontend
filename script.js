@@ -57,7 +57,7 @@ function setupSignupForm() {
                     if (data.token) {
                         alert('Signup successful!');
                         localStorage.setItem('token', data.token); 
-                        window.location.href = '/login.html'; 
+                        window.location.href = '/index.html'; 
                     } else {
                         alert('Signup failed: ' + (data.errorMessage || 'Please try again.'));
                     }
