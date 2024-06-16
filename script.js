@@ -19,36 +19,24 @@ function handleLogin(event) {
     event.preventDefault();
     const user = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    console.log("Attempting to log in with:", user, password);
 
     fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user, password: password }),
     })
-        .then(response => {
-            console.log('Response status:', response.status);
-            return response.json().then(data => {
-                console.log('Parsed response data:', data);
-                return { status: response.status, ok: response.ok, data };
-            });
-        })
-        .then(({ status, ok, data }) => {
-            console.log('Login response:', { status, ok, data });
-            if (ok && data.token) {
-                alert('Login successful!');
-                console.log('Token:', data.token);
-                localStorage.setItem('token', data.token);
-                window.location.href = '/homepage.html';
-            } else {
-                console.error('Login failed, no token received:', data);
-                alert('Login failed: ' + (data.error || 'Invalid username or password.'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Login failed, please try again.');
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/homepage.html';
+        } else {
+            alert('Login failed: ' + (data.error || 'Invalid username or password.'));
+        }
+    })
+    .catch(error => {
+        alert('Login failed, please try again.');
+    });
 }
 
 function setupSignupForm() {
@@ -194,28 +182,31 @@ function handleAddComment(event, workoutId) {
     event.preventDefault();
     const commentText = document.getElementById('commentText').value;
     const token = localStorage.getItem('token');
+
+    console.log('Adding comment for workout:', workoutId); // Log workoutId
+
     fetch('http://localhost:3000/api/comments', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ text: commentText, workout: workoutId })
+        body: JSON.stringify({ text: commentText, workoutId: workoutId })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            loadComments(workoutId);
-            document.getElementById('commentText').value = '';
-        })
-        .catch(error => {
-            console.error('Error adding comment:', error);
-            alert(`Failed to add comment: ${error.message}`);
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        loadComments(workoutId);
+        document.getElementById('commentText').value = '';
+    })
+    .catch(error => {
+        console.error('Error adding comment:', error);
+        alert(`Failed to add comment: ${error.message}`);
+    });
 }
 
 function handleEditComment(commentId, workoutId) {
